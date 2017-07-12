@@ -1,0 +1,11 @@
+= Coding Rules
+
+[[default]]
+[role=group,includesGroups="mySPIN:Default"]
+== Default Rules
+
+The following rule groups are executed by default:
+
+- <<mySPIN:Default>>
+
+include::myspin.adoc[]

@@ -1,0 +1,6 @@
+out/
+*.apk
+.idea
+!sample.apk
+jqassistant/
+env/

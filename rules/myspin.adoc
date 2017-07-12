@@ -1,0 +1,84 @@
+[[mySPIN:Default]]
+[role=group,includesConstraints="mySPIN:Android:onStartSharedInstance,mySPIN:Android:onStartRegisterApplication,mySPIN:Android:onResumeRegisterListener,mySPIN:Android:onPauseRemoveListener,"]
+== mySPIN
+
+
+=== Concepts
+
+[[mySPIN:AndroidActivityConcept]]
+[source,cypher,role=concept]
+.All classes that ends with 'Activity' are maked with the label Android:Activity
+----
+MATCH (x:Class)
+
+WHERE x.fqn =~ '.*Activity'
+
+SET x:Android:Activity
+
+RETURN x
+----
+
+
+
+=== Constrains
+
+
+==== onStartSharedInstance
+
+[[mySPIN:Android:onStartSharedInstance]]
+.During the onStart method the activity should get the sharedInstance() from the MySpinServerSDK static method
+[source,cypher,role=constraint,requiresConcepts="mySPIN:AndroidActivityConcept",severity=blocker]
+----
+MATCH (sdk:Class {fqn:'com.bosch.myspin.serversdk.MySpinServerSDK'})<-[:DEPENDS_ON]-(activity:Android:Activity)
+
+WHERE
+    not( (activity)-[:DECLARES]-(:Method {name:'onStart'})-[:INVOKES*]->(:Method {name: 'sharedInstance'})<-[:DECLARES]-(sdk))
+
+RETURN sdk,activity
+----
+
+==== onStartRegisterApplication
+
+[[mySPIN:Android:onStartRegisterApplication]]
+.During the onStart method the activity should set the application
+[source,cypher,role=constraint,requiresConcepts="mySPIN:AndroidActivityConcept",severity=blocker]
+----
+MATCH
+    (sdk:Class {fqn:'com.bosch.myspin.serversdk.MySpinServerSDK'})<-[:DEPENDS_ON]-(activity:Android:Activity)
+
+WHERE
+    not( (activity)-[:DECLARES]-(:Method {name:'onStart'})-[:INVOKES*]->(:Method {name: 'registerApplication'})<-[:DECLARES]-(sdk))
+
+RETURN sdk,activity
+----
+
+
+==== onResumeRegisterListener
+
+[[mySPIN:Android:onResumeRegisterListener]]
+.During the onResume method the activity should register the connection change listener
+[source,cypher,role=constraint,requiresConcepts="mySPIN:AndroidActivityConcept",severity=blocker]
+----
+MATCH
+    (sdk:Class {fqn:'com.bosch.myspin.serversdk.MySpinServerSDK'})<-[:DEPENDS_ON]-(activity:Android:Activity)
+
+WHERE
+    not((activity)-[:DECLARES]-(:Method {name:'onResume'})-[:INVOKES*]->(:Method {name: 'registerConnectionStateListener'})<-[:DECLARES]-(sdk))
+
+RETURN sdk,activity
+----
+
+==== onPauseRemoveListener
+
+[[mySPIN:Android:onPauseRemoveListener]]
+.During the onPause method the activity should remote the listener
+[source,cypher,role=constraint,requiresConcepts="mySPIN:AndroidActivityConcept",severity=blocker]
+----
+MATCH
+    (sdk:Class {fqn:'com.bosch.myspin.serversdk.MySpinServerSDK'})<-[:DEPENDS_ON]-(activity:Android:Activity)
+
+WHERE
+    not((activity)-[:DECLARES]-(:Method {name:'onPause'})-[:INVOKES*]->(:Method {name: 'unregisterConnectionStateListener'})<-[:DECLARES]-(sdk))
+
+RETURN sdk,activity
+----
