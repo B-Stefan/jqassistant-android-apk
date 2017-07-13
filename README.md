@@ -1,6 +1,6 @@
-# Android reverse engineer jQAssistant 
+# Analyze Android APK files with jQAssistant 
 
-This is a simple prototype to run jQAssistant tests on a apk file. 
+This is a simple prototype to run jQAssistant tests on an apk file. 
 
 
 ## Introduction
