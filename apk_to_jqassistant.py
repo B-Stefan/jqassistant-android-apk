@@ -18,13 +18,11 @@ def call(cmd, **kwargs):
     print('Running: {0}'.format(' '.join(cmd)))
     return subprocess.call(cmd, **kwargs)
 
-
 def print_header(text):
     block = "*********************************************"
     print(block)
     print('**' + text.center(len(block) - 4) + '**')
     print(block)
-
 
 def dex2jar():
     print_header("Convert 'apk' to 'jar'")
@@ -46,12 +44,9 @@ def jqassistant_report():
     call([home + '/lib/jqassistent/bin/jqassistant.sh', 'report','-reportDirectory', out_dir])
     print('Done')
 
-
-
 def jqassistant_server():
     print_header("Start neo4j server with 'jqassistant'")
     call([home + '/lib/jqassistent/bin/jqassistant.sh', 'server'])
-
 
 def main():
     global apk_file, project_name, home, out_dir
@@ -78,15 +73,14 @@ def main():
             else:
                 print("[ ERROR ] You must select a valid APK file!")
                 exit(1)
+                
         elif args_action == 'server':
             jqassistant_server()
 
         elif args_action == 'analyze':
             jqassistant_analyze()
             jqassistant_report()
-
-        elif args_action == 'report':
-            jqassistant_report()
+            
         else:
             print("[ ERROR ] The first argument must be one of the actions: `test`, `server`,`report` or `analyze`")
     else:
