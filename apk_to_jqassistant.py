@@ -60,7 +60,7 @@ def main():
     (options, args) = parser.parse_args()
 
     if not os.path.isdir(out_dir):
-        os.path.isdir(out_dir)
+        os.mkdir(out_dir)
 
     if len(args) >=1:
 
